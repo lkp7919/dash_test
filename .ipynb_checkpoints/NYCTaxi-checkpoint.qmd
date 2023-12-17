@@ -94,6 +94,50 @@ fig2.show()
 #| title: 속력별 경로 시각화
 
 
+fig3 = px.line_mapbox(
+    data_frame= df_small2,
+    lat = 'latitude',
+    lon = 'longitude',
+    line_group = 'id',
+    color = 'speed',
+    center = {'lat':40.7322, 'lon':-73.9052},
+    #---#
+    mapbox_style = 'carto-positron',
+    zoom=10,
+    width = 750,
+    height = 600
+) 
+scatter_data = px.scatter_mapbox(
+    data_frame=df_small2,
+    lat = 'latitude',
+    lon = 'longitude',
+    size = 'passenger_count',
+    size_max = 10,
+    color = 'speed',
+    #---#
+    mapbox_style = 'carto-positron',
+    zoom=11,
+).data
+for sd in scatter_data:
+    fig3.add_trace(sd)
+fig3.update_traces(
+    line={
+        'width':1
+    },
+    opacity=0.8
+    
+).data
+
+for i in range(150):
+    if fig3.data[i].mode == "lines":
+        fig3.data[i].name = fig3.data[i].name + "(path)"
+    else:
+        fig3.data[i].name  = fig3.data[i].name + "(pickup/dropoff)"
+
+
+
+fig3.show(config={'scrollZoom':False})
+
 
 
 ```
