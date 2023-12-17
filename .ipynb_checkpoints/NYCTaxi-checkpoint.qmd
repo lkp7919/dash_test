@@ -66,7 +66,25 @@ fig1.show()
 ```
 
 ```{python}
-#| title: 요일,시간에 따른 평균이동거리 시각화        
+#| title: 요일,시간에 따른 평균이동거리 시각화  
+tidydata2 = df.pivot_table(
+    index = 'pickup_hour',
+    columns = 'dayofweek',
+    values = 'dist',
+    aggfunc = 'mean'
+).stack().reset_index().rename({0:'평균 이동거리','pickup_hour':'pickup_hour 시간'},axis=1)
+
+tidydata2['요일']= tidydata2['dayofweek'] .apply(lambda x: week.get(x))
+
+fig2 = px.density_heatmap(
+    data_frame=tidydata2,
+    x='pickup_hour 시간',
+    y='요일',
+    z='평균 이동거리',
+    nbinsx=24,
+    nbinsy=7,
+    height=300
+)
 fig2.show()
 ```
 
@@ -74,5 +92,8 @@ fig2.show()
 
 ```{python}
 #| title: 속력별 경로 시각화
-fig3.show()
+
+
+
+
 ```
